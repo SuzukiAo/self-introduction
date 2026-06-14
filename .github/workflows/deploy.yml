@@ -2,14 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main, master ] # mainでもmasterでもどちらでも動くようにします
+    branches: [ main, master ]
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 警告に出ていた「Node 24への強制移行」を先取りしてエラーを回避する設定
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -20,21 +19,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Node.jsの最新安定版（v22〜24）を確実にセットアップする手順を追加
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
 
-      # 手動で確実にインストールとビルドを行う（これでエラーを回避します）
       - name: Install dependencies
         run: npm ci
 
       - name: Build Astro site
         run: npm run build
 
-      # 出来上がった公開用ファイルをGitHub Pagesにアップロードする
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -45,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps: deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }} # 👈 ココのスペースのエラーを修正しました
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
