@@ -1,35 +1,292 @@
 ---
-
+const siteTitle = "Self Introduction";
+const name = "鈴木 葵";
+const role = "理学部理学科1回生";
 ---
 
 <html lang="ja">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>自己紹介だよ</title>
-	</head>
-	<body>
-		<h1>鈴木葵</h1>
-		<div>理学部理学科1回生</div>
-		<p>趣味：最近は囲碁、麻雀</p>
-		<p>特技：耳を動かせること</p>
-		<p>興味：化学、特に金属錯体や量子化学、有機合成　そして物理学</p>
-		<hr></body>
-	<body>
-		<a href="https://www.chem-station.com/"> Chem-Station </a>
-	</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{siteTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&family=Zen+Maru+Gothic:wght@400;500&display=swap" rel="stylesheet">
+  </head>
+  <body>
+
+    <div class="bg-blur-effect"></div>
+
+    <main class="container">
+      <header class="header">
+        <div class="logo">iGEM Kyoto</div>
+      </header>
+
+      <section id="about" class="hero">
+        <h1 class="title-fade-in">{name}</h1>
+        <h2 class="title-fade-in-delayed">{role}</h2>
+        <p class="desc-fade-in">
+          趣味：最近は囲碁、麻雀をやっています<br>
+          興味：化学　特に無機化学、量子化学、有機合成
+        </p>
+      </section>
+
+      <section id="works" class="works-section">
+        <h3 class="section-title">Sites</h3>
+        <div class="grid">
+          
+          <a href="https://www.chem-station.com/" class="card" target="_blank" rel="noopener noreferrer">
+            <div class="card-inner">
+              <h4>Chem-Station</h4>
+              <p>たまにみるサイト</p>
+              <div class="card-arrow">→</div>
+            </div>
+          </a>
+
+          <a href="https://x.com" class="card" target="_blank" rel="noopener noreferrer">
+            <div class="card-inner">
+              <h4>X/Twitter</h4>
+              <p>よくみるサイト</p>
+              <div class="card-arrow">→</div>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>&copy; {new Date().getFullYear()} {name}. Built with Astro.</p>
+      </footer>
+    </main>
+
+  </body>
 </html>
 
 <style>
-  h1 {
-    color: #4f46e5; 
-    font-size: 2.5rem;
+  /* --- 1. デザインの土台（リセット＆共通設定） --- */
+  :root {
+    --bg-color: #0b0f19;      /* 深みのあるダークネイビー */
+    --text-main: #f3f4f6;     /* 洗練されたオフホワイト */
+    --text-sub: #9ca3af;      /* 上品なグレー */
+    --accent: #6366f1;        /* ニュアンスのあるインディゴブルー */
+    --card-bg: rgba(255, 255, 255, 0.03); /* 透き通るガラス感 */
+    --font-en: 'Plus Jakarta Sans', sans-serif;
+    --font-ja: 'Zen Maru Gothic', sans-serif;
   }
-  .text {
-    color: #4b5563; 
-    font-weight: bold;
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-en), var(--font-ja);
+    overflow-x: hidden;
+  }
+
+  body {
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* --- 2. 手の凝った演出：背景のグラデーションのモヤ --- */
+  .bg-blur-effect {
+    position: absolute;
+    top: -10%;
+    left: 60%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(0,0,0,0) 70%);
+    filter: blur(80px);
+    z-index: -1;
+    pointer-events: none;
+    animation: float-bg 20s infinite alternate;
+  }
+
+  @keyframes float-bg {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(-100px, 50px); }
+  }
+
+  /* --- 3. レイアウト（美しく大きな余白） --- */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 0;
+  }
+
+  .logo {
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    font-size: 1.25rem;
+  }
+
+  .nav a {
+    color: var(--text-sub);
+    text-decoration: none;
+    margin-left: 2rem;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+  }
+
+  .nav a:hover {
+    color: var(--text-main);
+  }
+
+  /* --- 4. アニメーション：時間差（ディレイ）で上品に現れる --- */
+  .hero {
+    padding: 8rem 0 6rem 0;
+  }
+
+  .sub-fade-in {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    animation: fadeInUp 1s ease forwards;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem); /* 画面サイズで文字サイズが最適化 */
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.2s forwards;
+  }
+
+  .hero h2 {
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    font-weight: 400;
+    color: var(--text-sub);
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.4s forwards;
+  }
+
+  .desc-fade-in {
+    font-size: 1.05rem;
+    color: var(--text-sub);
+    line-height: 1.8;
+    max-width: 500px;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.6s forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* --- 5. 手の凝った演出：ガラス風カードとホバーアニメ --- */
+  .works-section {
+    padding: 6rem 0;
+  }
+
+  .section-title {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-sub);
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.75rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .card {
+	text-decoration: none; 
+    color: inherit;        
+    display: block;
+
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 2.5rem;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); /* 高級感のある滑らかな動き */
+  }
+
+  /* マウスを乗せた時の凝ったエフェクト */
+  .card:hover {
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+
+  .card-num {
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 600;
+    display: block;
+    margin-bottom: 1.5rem;
+  }
+
+  .card h4 {
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.75rem;
+  }
+
+  .card p {
+    color: var(--text-sub);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .card-arrow {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    font-size: 1.25rem;
+    color: var(--text-sub);
+    transform: translateX(-10px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card:hover .card-arrow {
+    transform: translateX(0);
+    opacity: 1;
+    color: var(--text-main);
+  }
+
+  /* --- 6. フッター --- */
+  .footer {
+    padding: 5rem 0 3rem 0;
+    text-align: center;
+    color: var(--text-sub);
+    font-size: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
   }
 </style>
