@@ -1,25 +1,52 @@
 name: Deploy to GitHub Pages
 
-# 1. どんな時に実行するか（トリガー）
 on:
   push:
-    branches: [ main ] # mainブランチにコードがプッシュされたら動く
+    branches: [ main, master ] # mainでもmasterでもどちらでも動くようにします
 
-# 2. ロボットに与える権限（セキュリティ設定）
 permissions:
-  contents: read     # コードを読み取る権限
-  pages: write        # GitHub Pagesに書き込む（公開する）権限
-  id-token: write     # 安全に連携するためのトークン権限
+  contents: read
+  pages: write
+  id-token: write
 
-# 3. 具体的な作業手順（ジョブ）
+# 警告に出ていた「Node 24への強制移行」を先取りしてエラーを回避する設定
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
-    runs-on: ubuntu-latest # Linux（Ubuntu）の仮想環境を裏で立ち上げる
+    runs-on: ubuntu-latest
     steps:
-      # ステップ①：GitHubにあるあなたのコードをこの環境に持ってくる
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ステップ②：Astroの公式ロボットを使って、自動でインストール・ビルド・公開まで行う
-      - name: Install, build, and upload with Astro Clips
-        uses: withastro/action@v3
+      # Node.jsの最新安定版（v22〜24）を確実にセットアップする手順を追加
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      # 手動で確実にインストールとビルドを行う（これでエラーを回避します）
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Astro site
+        run: npm run build
+
+      # 出来上がった公開用ファイルをGitHub Pagesにアップロードする
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps: deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
